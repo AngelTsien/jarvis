@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>J.A.R.V.I.S.</title><meta name="theme-color" content="#000">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 10%22><circle cx=%225%22 cy=%225%22 r=%224%22 fill=%22%2300e5ff%22/></svg>">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div id="boot"><div class="boot-ring"></div><pre id="bootlog"></pre><h1 id="bootTitle">JARVIS ONLINE</h1></div>
+<div class="scan"></div>
+<header><span class="logo">J.A.R.V.I.S.</span><span id="status">待命</span>
+ <button id="muteBtn" title="静音">🔊</button><button id="setBtn" title="设置">⚙️</button></header>
+<main>
+ <aside class="left">
+  <section class="panel"><h3>时间 // TIME</h3><div id="clock">--:--:--</div><div id="date"></div></section>
+  <section class="panel"><h3>天气 // WEATHER</h3><div id="weather">加载中…</div></section>
+  <section class="panel"><h3>快捷 // LINKS</h3><div id="links"></div></section>
+ </aside>
+ <section class="core">
+  <canvas id="reactor"></canvas>
+  <div id="log"></div>
+ </section>
+ <aside class="right">
+  <section class="panel"><h3>行情 // US100</h3><div class="tv" data-sym="OANDA:NAS100USD"></div></section>
+  <section class="panel"><h3>行情 // USOIL</h3><div class="tv" data-sym="TVC:USOIL"></div></section>
+ </aside>
+</main>
+<footer>
+ <button id="micBtn" title="按住说话">🎙️</button>
+ <input id="txt" placeholder="对 Jarvis 说点什么…（回车发送）" autocomplete="off">
+ <button id="sendBtn">发送</button>
+ <button id="handoffBtn" title="交给编程大师">📨</button>
+</footer>
+<div id="settings" hidden><div class="panel dlg">
+ <h3>⚙️ 设置</h3>
+ <label>AI 服务商<select id="sProv"><option value="groq">Groq（默认，免费）</option><option value="gemini">Google Gemini（免费层）</option><option value="openrouter">OpenRouter（:free 模型）</option></select></label>
+ <label>API Key（只存在本机浏览器）<input id="sKey" type="password" placeholder="粘贴你的 key"></label>
+ <label>模型（留空用默认）<input id="sModel" placeholder=""></label>
+ <label>记忆条数<input id="sMem" type="number" min="2" max="40"></label>
+ <label><input id="sWake" type="checkbox"> 唤醒词「Jarvis / 贾维斯」常驻监听</label>
+ <label>编程大师邮箱（📨 交接用）<input id="sMail" type="email" placeholder="例如 bot@example.com"></label>
+ <div class="row"><button id="sSave">保存</button><button id="sClear">清空对话记忆</button><button id="sClose">关闭</button></div>
+ <p class="hint">Key 仅保存在本机 localStorage，不会上传到任何地方（除了直接发给你选的 AI 服务商）。获取方法见 README。</p>
+</div></div>
+<script src="app.js"></script>
+</body></html>
