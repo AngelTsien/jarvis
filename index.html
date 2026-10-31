@@ -4,60 +4,26 @@
 <title>J.A.R.V.I.S.</title><meta name="theme-color" content="#000">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 10%22><circle cx=%225%22 cy=%225%22 r=%224%22 fill=%22%2300e5ff%22/></svg>">
 <link rel="manifest" href="manifest.json">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head><body>
-<div id="boot"><div class="boot-ring"></div><pre id="bootlog"></pre><h1 id="bootTitle">JARVIS ONLINE</h1><button id="initBtn" hidden>▶ INITIALIZE</button><p class="hint">点击启动：解锁声音和麦克风</p></div>
-<div class="scan"></div>
-<header><span class="logo">J.A.R.V.I.S.</span><span id="status">待命</span>
- <button id="helpBtn" title="手势帮助">?</button><button id="handBtn" title="手势控制">✋</button><button id="convBtn" title="免按键对话">⚪ 免按键</button><button id="muteBtn" title="静音">🔊</button><button id="setBtn" title="设置">⚙️</button></header>
-<main>
- <aside class="left">
-  <section class="panel"><h3>时间 // TIME</h3><div id="clock">--:--:--</div><div id="date"></div></section>
-  <section class="panel"><h3>天气 // WEATHER</h3><div id="weather">加载中…</div></section>
-  <section class="panel"><h3>快捷 // LINKS</h3><div id="links"></div></section>
- </aside>
- <section class="core">
-  <canvas id="reactor"></canvas>
-  <div id="log"></div>
- </section>
- <aside class="right">
-  <section class="panel"><h3>行情 // US100</h3><div class="tv" data-sym="OANDA:NAS100USD"></div></section>
-  <section class="panel"><h3>行情 // USOIL</h3><div class="tv" data-sym="TVC:USOIL"></div></section>
- </aside>
-</main>
-<footer>
- <button id="micBtn" title="按住说话">🎙️</button>
- <input id="txt" placeholder="对 Jarvis 说点什么…（回车发送）" autocomplete="off">
- <button id="sendBtn">发送</button>
- <button id="handoffBtn" title="交给编程大师">📨</button>
-</footer>
-<div id="settings" hidden><div class="panel dlg">
- <h3>⚙️ 设置</h3>
+<canvas id="stage"></canvas>
+<div id="boot"><h1>J.A.R.V.I.S.</h1><button id="initBtn">INITIALIZE</button><p>点击启动 · 解锁声音与麦克风</p></div>
+<div id="dot" title="状态"></div>
+<nav id="icons"><button id="convBtn" title="免按键对话">🎙️</button><button id="camBtn" title="摄像头手势">✋</button><button id="setBtn" title="设置">⚙️</button></nav>
+<div id="sub"></div>
+<input id="txt" placeholder="说话，或在这里打字回车" autocomplete="off">
+<div id="win" hidden><div class="bar"><span id="winTitle"></span><a id="winExt" target="_blank" rel="noopener">↗</a><button id="winClose">✕</button></div><iframe id="winFrame" allow="camera; microphone; fullscreen; autoplay"></iframe></div>
+<div id="settings" hidden><div class="dlg">
+ <h3>设置</h3>
  <label>AI 服务商<select id="sProv"><option value="groq">Groq（默认，免费）</option><option value="gemini">Google Gemini（免费层）</option><option value="openrouter">OpenRouter（:free 模型）</option></select></label>
  <label>API Key（只存在本机浏览器）<input id="sKey" type="password" placeholder="粘贴你的 key"></label>
- <label>模型（留空用默认）<input id="sModel" placeholder=""></label>
- <label>记忆条数<input id="sMem" type="number" min="2" max="40"></label>
- <label>JARVIS 声音<select id="sVoice"></select></label>
- <div class="row"><button id="sTest">🔈 测试声音</button></div>
- <label><input id="sHands" type="checkbox"> ✋ 手势控制（需要摄像头）</label>
- <label><input id="sWake" type="checkbox"> 唤醒词「Jarvis / 贾维斯」模式（关闭免按键对话时使用）</label>
- <label>编程大师邮箱（📨 交接用）<input id="sMail" type="email" placeholder="例如 bot@example.com"></label>
- <div class="row"><button id="sSave">保存</button><button id="sClear">清空对话记忆</button><button id="sClose">关闭</button></div>
- <p class="hint">Key 仅保存在本机 localStorage，不会上传到任何地方（除了直接发给你选的 AI 服务商）。获取方法见 README。</p>
+ <label>模型（留空用默认）<input id="sModel"></label>
+ <label>声音<select id="sVoice"></select></label>
+ <label>编程大师邮箱（说「交给编程大师…」时打开邮件草稿）<input id="sMail" type="email"></label>
+ <div class="row"><button id="sTest">测试声音</button><button id="sClear">清空记忆</button><button id="sSave">保存</button><button id="sClose">关闭</button></div>
+ <p class="hint">手势：手移动＝JARVIS 跟随 · 捏合拖动＝转动身体 · 张开手掌停 1 秒＝开/关聆听 · 👍＝确认</p>
 </div></div>
 <script src="app.js"></script>
-<script type="module" src="core3d.js"></script>
-<script type="module" src="hands.js"></script>
-<div class="glitch-bar"></div>
-<div id="gToast"></div>
-<div id="help" hidden><div class="panel dlg"><h3>✋ 手势指令</h3><table>
-<tr><td>☝️ 食指移动</td><td>光标</td></tr><tr><td>🤏 捏合拖动 / 快捏</td><td>拖动面板窗口 / 点击</td></tr>
-<tr><td>✋ 张开手掌移动</td><td>旋转 3D 核心</td></tr><tr><td>✋ 手掌静止 1 秒</td><td>开/关聆听</td></tr>
-<tr><td>👍 竖大拇指</td><td>确认「收到先生」</td></tr><tr><td>👎 拇指向下</td><td>取消 / 关闭最上层窗口</td></tr>
-<tr><td>✊ 握拳保持</td><td>停止说话 + 静音切换</td></tr><tr><td>✌️ 剪刀手</td><td>报时间和天气</td></tr>
-<tr><td>👌 OK</td><td>打开上次的项目</td></tr><tr><td>👋 左右挥手</td><td>打招呼</td></tr>
-<tr><td>👈👉 手掌快速横扫</td><td>切换上/下一个项目窗口</td></tr><tr><td>☝️ 食指朝上</td><td>对话记录向上滚</td></tr>
-<tr><td>🙌 双手张开/靠拢</td><td>放大/缩小核心</td></tr></table><p class="hint">点任意处关闭</p></div></div>
+<script type="module" src="figure.js"></script>
 </body></html>
